@@ -610,9 +610,12 @@ async function init() {
   showLoading('Cargando referencias...');
 
   try {
-    const res = await fetch(APPS_SCRIPT_URL, { signal: AbortSignal.timeout(10000) });
+    // Apps Script hace redirect — usamos allorigins como proxy CORS
+    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(APPS_SCRIPT_URL);
+    const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(15000) });
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    const json = await res.json();
+    const wrapper = await res.json();
+    const json = JSON.parse(wrapper.contents);
 
     if (!json.ok) throw new Error(json.error || 'Error desconocido');
     refs = json.refs;
