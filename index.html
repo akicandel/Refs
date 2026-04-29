@@ -370,8 +370,7 @@
 
 <script>
 // ── CONFIG ───────────────────────────────────────────────────────────
-// URL del Google Apps Script (ver instrucciones en apps-script.gs)
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbycJVnSF_4nGqT2hKivTHVACcakNj4HqTPfoERL6-sHKAb9hf4FnF_L8Z6t_1B77_fR/exec';
+const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/1c0bKFArizhXKDUZmgJNYhO_WA78uTyPckO6keg2I96g/gviz/tq?tqx=out:csv';
 
 // ── HELPERS ───────────────────────────────────────────────────────────
 function getDomain(url) { try { return new URL(url).hostname; } catch { return ''; } }
@@ -600,35 +599,47 @@ function showError(msg) {
   empty.innerHTML = msg;
 }
 
-// ── INIT: cargar desde Google Sheets ─────────────────────────────────
+// ── INIT ─────────────────────────────────────────────────────────────
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim().toLowerCase());
+  return lines.slice(1).map(line => {
+    const values = [];
+    let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c === '"') { inQ = !inQ; }
+      else if (c === ',' && !inQ) { values.push(cur); cur = ''; }
+      else { cur += c; }
+    }
+    values.push(cur);
+    const obj = {};
+    headers.forEach((h, i) => { obj[h] = (values[i] || '').replace(/^"|"$/g, '').trim(); });
+    return obj;
+  }).filter(r => r.url && r.name && r.url.startsWith('http'));
+}
+
 async function init() {
   document.getElementById('search').addEventListener('input', e => {
     searchQuery = e.target.value;
     render();
   });
 
-  showLoading('Cargando referencias...');
+  const empty = document.getElementById('empty');
+  empty.style.display = 'block';
+  empty.textContent = 'Cargando referencias...';
 
   try {
-    // Apps Script hace redirect — usamos allorigins como proxy CORS
-    const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(APPS_SCRIPT_URL);
-    const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(15000) });
+    const res = await fetch(SHEET_CSV, { signal: AbortSignal.timeout(10000) });
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    const wrapper = await res.json();
-    const json = JSON.parse(wrapper.contents);
-
-    if (!json.ok) throw new Error(json.error || 'Error desconocido');
-    refs = json.refs;
-
-    if (!refs.length) {
-      showError('La hoja está vacía o no tiene el formato correcto.');
-      return;
-    }
-
+    const csv = await res.text();
+    refs = parseCSV(csv);
+    if (!refs.length) throw new Error('La hoja está vacía');
     buildFilters();
     render();
   } catch (err) {
-    showError('Error cargando referencias.<br><small>' + err.message + '</small>');
+    empty.style.display = 'block';
+    empty.textContent = 'Error cargando referencias: ' + err.message;
   }
 }
 
