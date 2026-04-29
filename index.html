@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REF — Archivo de Referencias</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0e;
+    --surface: #161616;
+    --border: #2a2a2a;
+    --text: #e8e4dc;
+    --muted: #666;
+    --accent: #c8ff00;
+    --accent2: #ff4d00;
+    --card-hover: #1e1e1e;
+    --radius: 4px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    height: 56px;
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .logo span {
+    color: var(--muted);
+    font-weight: 400;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+    justify-content: flex-end;
+  }
+
+  /* ── SEARCH ── */
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    max-width: 320px;
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  #search {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    padding: 0.45rem 0.75rem 0.45rem 2.2rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  #search:focus { border-color: var(--accent); }
+  #search::placeholder { color: var(--muted); }
+
+  /* ── COUNT ── */
+  #count {
+    font-size: 0.7rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* ── LAYOUT ── */
+  .page {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    min-height: calc(100vh - 56px);
+  }
+
+  /* ── SIDEBAR FILTERS ── */
+  aside {
+    border-right: 1px solid var(--border);
+    padding: 1.5rem 0;
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  aside::-webkit-scrollbar { display: none; }
+
+  .filter-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .cat-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.45rem 1.25rem;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+    text-align: left;
+    gap: 0.5rem;
+  }
+
+  .cat-btn:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+
+  .cat-btn.active {
+    color: var(--accent);
+    background: rgba(200,255,0,0.05);
+  }
+
+  .cat-btn .badge {
+    font-size: 0.6rem;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1px 5px;
+    min-width: 22px;
+    text-align: center;
+  }
+
+  .cat-btn.active .badge {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ── GRID ── */
+  main {
+    padding: 2rem;
+  }
+
+  #grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+
+  .card:hover { background: var(--card-hover); }
+
+  .card-img {
+    width: 100%;
+    aspect-ratio: 16/10;
+    object-fit: cover;
+    display: block;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .card:hover .card-img img {
+    transform: scale(1.04);
+  }
+
+  /* favicon fallback */
+  .card-img.no-thumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .card-img.no-thumb .favicon {
+    width: 32px;
+    height: 32px;
+    opacity: 0.5;
+  }
+
+  .card-img .placeholder-pattern {
+    position: absolute;
+    inset: 0;
+    opacity: 0.08;
+    background-image: repeating-linear-gradient(
+      45deg,
+      var(--text) 0,
+      var(--text) 1px,
+      transparent 0,
+      transparent 50%
+    );
+    background-size: 8px 8px;
+  }
+
+  .card-body {
+    padding: 0.75rem 0.9rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 1;
+  }
+
+  .card-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 0.78rem;
+    color: var(--text);
+    line-height: 1.3;
+    word-break: break-all;
+  }
+
+  .card-cat {
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .card-link-icon {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    background: rgba(14,14,14,0.75);
+    backdrop-filter: blur(4px);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .card:hover .card-link-icon { opacity: 1; }
+
+  /* ── EMPTY ── */
+  #empty {
+    display: none;
+    grid-column: 1/-1;
+    padding: 4rem 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    background: var(--bg);
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    .page { grid-template-columns: 1fr; }
+    aside {
+      position: static;
+      height: auto;
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem;
+      padding: 1rem;
+    }
+    .filter-label { width: 100%; }
+    .cat-btn { width: auto; border: 1px solid var(--border); border-radius: var(--radius); padding: 0.3rem 0.75rem; }
+    main { padding: 1rem; }
+    header { padding: 0 1rem; }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card { animation: fadeIn 0.3s ease both; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">REF <span>/ archivo de referencias</span></div>
+  <div class="header-right">
+    <div class="search-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input type="text" id="search" placeholder="Buscar..." autocomplete="off">
+    </div>
+    <span id="count"></span>
+  </div>
+</header>
+
+<div class="page">
+  <aside>
+    <div class="filter-label">Categoría</div>
+    <div id="filters"></div>
+  </aside>
+
+  <main>
+    <div id="grid">
+      <div id="empty" style="display:none">No se encontraron referencias.</div>
+    </div>
+  </main>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────
+const refs = [
+  // FONTS
+  { name: "That That Type", url: "https://www.thatthattype.com/", cat: "Fonts" },
+  { name: "Pangram Pangram", url: "https://pangrampangram.com/collections/fonts", cat: "Fonts" },
+  { name: "Type Everything", url: "https://typeverything.com/", cat: "Fonts" },
+  { name: "Invasitype Work", url: "https://invasitypework.com/product-category/font/", cat: "Fonts" },
+  { name: "Type Colony", url: "https://typecolony.com/", cat: "Fonts" },
+  { name: "Grilli Type", url: "https://www.grillitype.com/", cat: "Fonts" },
+  { name: "TypeType", url: "https://typetype.org/", cat: "Fonts" },
+  { name: "Good Type Foundry", url: "https://goodtypefoundry.com/", cat: "Fonts" },
+  { name: "Klim", url: "https://klim.co.nz/", cat: "Fonts" },
+
+  // ILLUSTRATION
+  { name: "Studio Puhl", url: "https://studiopuhl.com/work", cat: "Illustration" },
+  { name: "Andrea Alice", url: "https://andreaalice.com/", cat: "Illustration" },
+  { name: "Meganck", url: "https://meganck.com/", cat: "Illustration" },
+  { name: "Justin Poulter", url: "https://justinpoulter.com/", cat: "Illustration" },
+  { name: "Louis Rhead / Artvee", url: "https://artvee.com/artist/louis-rhead/", cat: "Illustration" },
+  { name: "Lolly Studio", url: "https://www.lollystudio.co.uk/work", cat: "Illustration" },
+  { name: "Kenzo Hamazaki", url: "https://kenzohamazaki.com.br/", cat: "Illustration" },
+  { name: "Jonas Mosesson", url: "https://jonasmosesson.se/", cat: "Illustration" },
+  { name: "Chiara Ghigliazza", url: "https://chiaraghigliazza.com/", cat: "Illustration" },
+  { name: "Hifumiyo", url: "http://www.hifumiyo.co/", cat: "Illustration" },
+  { name: "Thom Kemeyer", url: "https://www.thomkemeyer.com/", cat: "Illustration" },
+  { name: "Hine Mizushima", url: "https://hinemizushima.com/", cat: "Illustration" },
+  { name: "Untitled Army", url: "https://untitledarmy.com/", cat: "Illustration" },
+  { name: "Agence Pepite", url: "https://agence-pepite.fr/en/", cat: "Illustration" },
+  { name: "Caper Illustration", url: "https://www.caperillustration.co.uk/nanjiao-xi", cat: "Illustration" },
+  { name: "A Goodson", url: "https://www.agoodson.com/", cat: "Illustration" },
+  { name: "Jasuh Art", url: "https://www.jasuhuart.com/index", cat: "Illustration" },
+  { name: "Benedikt Luft", url: "https://benediktluft.com/", cat: "Illustration" },
+  { name: "See Outer Space", url: "https://www.seeouterspace.com/These-days", cat: "Illustration" },
+  { name: "Rob Hodgson", url: "https://www.robhodgson.com/", cat: "Illustration" },
+  { name: "Barry Blitt", url: "https://www.barryblitt.com/gallery-1", cat: "Illustration" },
+  { name: "Caroline Peron / Senso", url: "https://www.senso.art/en/caroline-peron", cat: "Illustration" },
+  { name: "Senso Art", url: "https://www.senso.art/en/", cat: "Illustration" },
+  { name: "Jean Aubertin / Senso", url: "https://www.senso.art/en/jean-aubertin", cat: "Illustration" },
+  { name: "Levine Leavitt", url: "https://levineleavitt.com/", cat: "Illustration" },
+  { name: "Lebassis", url: "https://lebassis.com/", cat: "Illustration" },
+  { name: "Joseph Melhuish", url: "https://josephmelhuish.com/", cat: "Illustration" },
+  { name: "Barbara Alca", url: "https://www.barbaraalca.com/", cat: "Illustration" },
+
+  // ANIMATION
+  { name: "Jonas Mosesson", url: "https://jonasmosesson.se/", cat: "Animation" },
+  { name: "Believe.tv", url: "https://believe.tv/", cat: "Animation" },
+  { name: "A Goodson", url: "https://www.agoodson.com/", cat: "Animation" },
+  { name: "OTP Works", url: "https://otp-works.tumblr.com/", cat: "Animation" },
+  { name: "Behance hi51993oh766b", url: "https://www.behance.net/hi51993oh766b", cat: "Animation" },
+  { name: "Space Type Generator", url: "https://spacetypegenerator.com/", cat: "Animation" },
+  { name: "Vetor Zero", url: "https://vetorzero.com.br/", cat: "Animation" },
+  { name: "Lobo", url: "https://www.lobo.cx/", cat: "Animation" },
+  { name: "Margherita Premuroso", url: "https://www.margheritapremuroso.com/projects", cat: "Animation" },
+  { name: "Roof Studio", url: "https://roofstudio.tv/about", cat: "Animation" },
+  { name: "Alba Motion", url: "https://albamotion.com/ABOUT", cat: "Animation" },
+  { name: "MakeMake / Elastic", url: "https://makemake.com/elastic/work/filter/entertainment/", cat: "Animation" },
+
+  // DESIGN
+  { name: "Design Reviewed", url: "https://designreviewed.com/", cat: "Design" },
+  { name: "Fonts In Use", url: "https://fontsinuse.com/", cat: "Design" },
+  { name: "German Montalvo", url: "http://www.germanmontalvo.com/cartel.html", cat: "Design" },
+  { name: "Justin Poulter", url: "https://justinpoulter.com/", cat: "Design" },
+  { name: "Flock", url: "https://weareflock.com/", cat: "Design" },
+  { name: "World Brand Design", url: "https://worldbranddesign.com/team-creates-hand-designed-jazz-inspired-packaging-for-blue-note-bars-new-bottled-cocktail/", cat: "Design" },
+  { name: "Marta Cerda", url: "https://martacerda.com/", cat: "Design" },
+  { name: "100 London Underground Posters", url: "https://iaqgraphicdesign.wordpress.com/2014/03/13/100-london-underground-posters/", cat: "Design" },
+  { name: "The Dieline", url: "https://thedieline.com/", cat: "Design" },
+  { name: "Minako Iwamura", url: "https://minako-iwamura.com/", cat: "Design" },
+  { name: "Kasa Made", url: "https://kasa-made.com/", cat: "Design" },
+  { name: "Studio Herrstrom", url: "https://www.studioherrstrom.com/", cat: "Design" },
+  { name: "Studio Plastac", url: "https://studioplastac.fr/", cat: "Design" },
+  { name: "We Want More Studio", url: "https://wewantmore.studio/", cat: "Design" },
+  { name: "Gretel NY / Viceland", url: "https://gretelny.com/viceland", cat: "Design" },
+  { name: "Design Bridge", url: "https://www.designbridge.com/work", cat: "Design" },
+  { name: "The Brand Identity", url: "https://the-brandidentity.com/", cat: "Design" },
+  { name: "Lebassis", url: "https://lebassis.com/", cat: "Design" },
+  { name: "Carla Palette", url: "https://carlapalette.com/works", cat: "Design" },
+  { name: "1987 Graphics", url: "https://1987.graphics/", cat: "Design" },
+  { name: "Form and Fun", url: "https://www.formandfun.co/", cat: "Design" },
+
+  // 3D / CGI
+  { name: "Lolly Studio", url: "https://www.lollystudio.co.uk/", cat: "3D / CGI" },
+  { name: "Vinicius Costa", url: "https://viniciuscosta.tv/work", cat: "3D / CGI" },
+  { name: "Noelia Lozano", url: "https://www.noelialozano.com/", cat: "3D / CGI" },
+  { name: "One Sal", url: "https://onesal.com/", cat: "3D / CGI" },
+  { name: "Untitled Army", url: "https://untitledarmy.com/", cat: "3D / CGI" },
+  { name: "Crea.st", url: "https://crea.st/", cat: "3D / CGI" },
+  { name: "MVSM", url: "https://mvsm.com/", cat: "3D / CGI" },
+  { name: "Free Agents", url: "https://www.freeagents.co/", cat: "3D / CGI" },
+  { name: "The Mill", url: "https://themill.com/", cat: "3D / CGI" },
+  { name: "1st Ave Machine", url: "https://www.1stavemachine.com/work-2/work", cat: "3D / CGI" },
+  { name: "Bolder Creative", url: "https://boldercreative.co.uk/", cat: "3D / CGI" },
+  { name: "Future Deluxe", url: "https://futuredeluxe.com/work/computer-aided-design", cat: "3D / CGI" },
+  { name: "CATK", url: "https://catk.de/", cat: "3D / CGI" },
+  { name: "Levine Leavitt", url: "https://levineleavitt.com/", cat: "3D / CGI" },
+  { name: "Someform Studio", url: "https://someform.studio/", cat: "3D / CGI" },
+  { name: "Tendril", url: "https://tendril.studio/", cat: "3D / CGI" },
+  { name: "Buck", url: "https://buck.co/", cat: "3D / CGI" },
+  { name: "J Formento", url: "https://jformento.com/work/", cat: "3D / CGI" },
+  { name: "Nolbert", url: "https://nolbert.com/", cat: "3D / CGI" },
+  { name: "MakeMake", url: "https://makemake.com/", cat: "3D / CGI" },
+  { name: "Arsthanea", url: "https://arsthanea.com/", cat: "3D / CGI" },
+  { name: "Form and Fun", url: "https://www.formandfun.co/", cat: "3D / CGI" },
+  { name: "Leroy Van Drie", url: "https://www.leroyvandrie.com/", cat: "3D / CGI" },
+  { name: "Pezzo di Studio", url: "https://pezzodistudio.com/about", cat: "3D / CGI" },
+
+  // TYPOGRAPHY
+  { name: "Anthony Burrill", url: "https://anthonyburrill.com/", cat: "Typography" },
+  { name: "Vocal Type", url: "https://www.vocaltype.co/typefaces", cat: "Typography" },
+  { name: "Lebassis", url: "https://lebassis.com/", cat: "Typography" },
+  { name: "Madeup Covers", url: "https://www.madeup.org/covers", cat: "Typography" },
+  { name: "Marta Cerda", url: "https://martacerda.com/", cat: "Typography" },
+  { name: "Andrew Hudson", url: "https://www.andrewhudson.co.uk/", cat: "Typography" },
+  { name: "Dan Forster", url: "https://danforster.com/about/", cat: "Typography" },
+  { name: "Lemon Typeface / Behance", url: "https://www.behance.net/gallery/182528277/Lemon-Typeface-18-Styles-Variable-Regular-Free", cat: "Typography" },
+  { name: "Grilli Type", url: "https://www.grillitype.com/", cat: "Typography" },
+  { name: "Pangram Pangram", url: "https://pangrampangram.com/collections/fonts", cat: "Typography" },
+  { name: "Commercial Type", url: "https://commercialtype.com/", cat: "Typography" },
+  { name: "Fonts In Use", url: "https://fontsinuse.com/", cat: "Typography" },
+  { name: "Type Department", url: "https://type-department.com/", cat: "Typography" },
+  { name: "Alex Valentina", url: "https://alexvalentina.com/", cat: "Typography" },
+  { name: "Abraham Lule", url: "https://www.abrahamlule.com/", cat: "Typography" },
+  { name: "Type of Feeling", url: "https://typeoffeeling.com/", cat: "Typography" },
+  { name: "VJ Type", url: "https://vj-type.com/", cat: "Typography" },
+  { name: "Space Type Generator", url: "https://spacetypegenerator.com/", cat: "Typography" },
+  { name: "Not Your Type", url: "https://notyourtype.nl/typefaces/", cat: "Typography" },
+  { name: "Mahimkar", url: "https://www.mahimkar.com/", cat: "Typography" },
+
+  // ART
+  { name: "Matti Braun / Esther Schipper", url: "https://www.estherschipper.com/artists/32-matti-braun/", cat: "Art" },
+  { name: "Artvee", url: "https://artvee.com/", cat: "Art" },
+  { name: "Jumana Manna", url: "https://www.jumanamanna.com/", cat: "Art" },
+  { name: "Hine Mizushima", url: "https://hinemizushima.com/", cat: "Art" },
+  { name: "Coded Elegance / 1stDibs", url: "https://www.1stdibs.com/nft-collections/exhibitions/coded-elegance/", cat: "Art" },
+
+  // VIDEO
+  { name: "Eycndy", url: "https://eycndy.co/", cat: "Video" },
+  { name: "Roof Studio", url: "https://roofstudio.tv/", cat: "Video" },
+  { name: "Hine Mizushima Videos", url: "https://hinemizushima.com/videos", cat: "Video" },
+  { name: "Film Grab", url: "https://film-grab.com/", cat: "Video" },
+  { name: "Division Global", url: "https://www.division.global/", cat: "Video" },
+
+  // NFT
+  { name: "Coded Elegance / 1stDibs", url: "https://www.1stdibs.com/nft-collections/exhibitions/coded-elegance/", cat: "NFT" },
+
+  // ARQUITECTURA
+  { name: "VGZ Arquitectura", url: "https://www.vgzarquitectura.com/proyectos-arquitectura", cat: "Arquitectura" },
+  { name: "Kasa Made", url: "https://kasa-made.com/", cat: "Arquitectura" },
+
+  // CRAFT
+  { name: "Picte Studio", url: "https://pictestudio.com.br/", cat: "Craft" },
+  { name: "Tanaka Tatsuya", url: "https://www.instagram.com/tanaka_tatsuya/", cat: "Craft" },
+  { name: "Anthony Zinonos", url: "https://anthonyzinonos.com/", cat: "Craft" },
+  { name: "Dtan Studio", url: "https://dtan.studio/", cat: "Craft" },
+  { name: "Design and Paper", url: "https://www.designandpaper.com/topics/paper/", cat: "Craft" },
+  { name: "Motor Niveo", url: "https://motor.niveo.com.br/", cat: "Craft" },
+  { name: "Modem Works / Terra", url: "https://modemworks.com/projects/terra/", cat: "Craft" },
+  { name: "Levine Leavitt", url: "https://levineleavitt.com/", cat: "Craft" },
+  { name: "MakeMake", url: "https://makemake.com/", cat: "Craft" },
+
+  // FILM
+  { name: "Vimeo 446667224", url: "https://vimeo.com/446667224", cat: "Film" },
+  { name: "Landia Mexico", url: "https://www.landia.com/mexico/", cat: "Film" },
+  { name: "Not Normal Films", url: "https://www.notnormalfilms.com/", cat: "Film" },
+  { name: "Rebolucion", url: "https://www.rebolucion.com/", cat: "Film" },
+  { name: "Oriental Films", url: "https://www.orientalfilms.tv/", cat: "Film" },
+  { name: "Alex Sees This", url: "https://alexseesthis.com/", cat: "Film" },
+  { name: "Niclas Larsson / Vimeo", url: "https://vimeo.com/niclaslarsson", cat: "Film" },
+  { name: "Company 3", url: "https://www.company3.com/", cat: "Film" },
+  { name: "Film Grab", url: "https://film-grab.com/", cat: "Film" },
+  { name: "David Drake", url: "https://www.daviddrake.co.uk/", cat: "Film" },
+  { name: "Somework TV", url: "https://somework.tv/", cat: "Film" },
+
+  // COLOR
+  { name: "Company 3", url: "https://www.company3.com/", cat: "Color" },
+
+  // MOCKUP
+  { name: "Showcase BH", url: "https://showcasebh.com/all-mockup.html", cat: "Mockup" },
+  { name: "Mockup Maison", url: "https://mockup.maison/collections/apparel", cat: "Mockup" },
+  { name: "Bendito Mockup", url: "https://benditomockup.com/shop", cat: "Mockup" },
+
+  // FOTO
+  { name: "Kito Munoz / Artlist Paris", url: "https://www.artlistparis.com/kito-munoz", cat: "Foto" },
+  { name: "Giant Artists", url: "https://www.giantartists.com/categories", cat: "Foto" },
+  { name: "Lucas Garrido", url: "https://lucasgarrido.com/", cat: "Foto" },
+  { name: "Guy Aroch", url: "https://www.instagram.com/guyaroch/", cat: "Foto" },
+  { name: "Jeffrey Czum Editions", url: "https://jeffreyczumeditions.com/", cat: "Foto" },
+  { name: "Jake Stangel", url: "https://jakestangel.com/", cat: "Foto" },
+  { name: "Ioe Greer", url: "https://www.instagram.com/ioegreer/", cat: "Foto" },
+  { name: "Willem Verbeeck", url: "https://www.willemverbeeck.com/", cat: "Foto" },
+  { name: "Dan Tobin Smith", url: "https://www.dantobinsmith.com/portfolio", cat: "Foto" },
+  { name: "Owen Harvey", url: "https://owen-harvey.com/Series-Index", cat: "Foto" },
+  { name: "Lou Escobar", url: "https://louescobar.com/print/", cat: "Foto" },
+  { name: "Ana Cuba", url: "https://anacuba.com/", cat: "Foto" },
+  { name: "Will Cooper Photography", url: "https://www.willcooperphotography.com/", cat: "Foto" },
+  { name: "VL Lorente", url: "https://www.vllorente.com/", cat: "Foto" },
+  { name: "Img Upscaler", url: "https://imgupscaler.com/", cat: "Foto" },
+  { name: "Gavin Goodman", url: "https://www.gavingoodman.com/home-1", cat: "Foto" },
+  { name: "Dan Carter", url: "https://dancarter.co/", cat: "Foto" },
+  { name: "Ilka Franz", url: "https://www.ilkafranz.com/", cat: "Foto" },
+  { name: "Oscar Matt", url: "https://oscarmatt.com/", cat: "Foto" },
+  { name: "Oscar Calleja", url: "https://www.oscarcalleja.com/", cat: "Foto" },
+  { name: "Harel Ocante / Senso", url: "https://www.senso.photo/fr/harel-ocante", cat: "Foto" },
+  { name: "Manu Fauque", url: "https://www.manufauque.com/portfolio", cat: "Foto" },
+  { name: "Andrea Arevalo", url: "https://andreaarevalo.com/", cat: "Foto" },
+  { name: "Manel Cano", url: "https://manelcano.com/work-desktop", cat: "Foto" },
+  { name: "Porodina", url: "https://porodina.com/", cat: "Foto" },
+  { name: "Thibaut Grevet", url: "https://www.thibautgrevet.com/", cat: "Foto" },
+  { name: "Pablo de Pastors", url: "https://pablodepastors.com/works", cat: "Foto" },
+  { name: "Jack Webb / 1972 Agency", url: "https://1972.agency/artists/jack-webb/portfolios/general-portfolio-49/1232", cat: "Foto" },
+  { name: "Alys Thomas", url: "https://www.alysthomas.com/", cat: "Foto" },
+  { name: "Thibaut Grevet Photography", url: "https://photography.thibautgrevet.com/", cat: "Foto" },
+  { name: "Juliana Kasumu", url: "https://www.julianakasumu.com/portraits#2", cat: "Foto" },
+  { name: "Christopher Anderson Photo", url: "https://christopherandersonphoto.com/", cat: "Foto" },
+  { name: "Zhonglin", url: "https://www.instagram.com/zhonglin_/", cat: "Foto" },
+  { name: "Richard John Seymour", url: "https://richardjohnseymour.com/home", cat: "Foto" },
+  { name: "Nadav Kander", url: "https://www.nadavkander.com/portraits", cat: "Foto" },
+  { name: "Jake Inez", url: "https://www.jakeinez.net/personal", cat: "Foto" },
+  { name: "Marcus Smith", url: "https://www.marcus-smith.com/", cat: "Foto" },
+  { name: "Van Schelven", url: "https://www.van-schelven.com/", cat: "Foto" },
+
+  // INSPIRATION
+  { name: "Fuse Kiwi", url: "https://www.fuse.kiwi/", cat: "Inspiration" },
+
+  // INDUSTRIAL
+  { name: "Alessandro Boldrin", url: "https://www.alessandroboldrin.de/work", cat: "Industrial" },
+  { name: "Product Notion", url: "https://product-notion.com/", cat: "Industrial" },
+
+  // DESIGNS
+  { name: "Due Studio", url: "https://www.due-studio.com/", cat: "Designs" },
+  { name: "Reesaw / Behance", url: "https://www.behance.net/reesaw1", cat: "Designs" },
+  { name: "Soup Work", url: "https://soup.work/about", cat: "Designs" },
+  { name: "Tristesse", url: "https://www.tristesse.ch/", cat: "Designs" },
+  { name: "Carlos Bernal Portfolio", url: "https://carlosbernalportfolio.com/", cat: "Designs" },
+  { name: "HNLN", url: "https://hnln.co/", cat: "Designs" },
+  { name: "Joan Comellas Design", url: "https://joancomellas.design/", cat: "Designs" },
+  { name: "Yang Raller", url: "https://yangraller.cargo.site/", cat: "Designs" },
+  { name: "Jennifer Sterling Design", url: "https://www.jennifersterlingdesign.com/", cat: "Designs" },
+  { name: "Bruno Oppido", url: "http://www.brunooppido.com/", cat: "Designs" },
+  { name: "Y-U-K-I-K-O", url: "https://y-u-k-i-k-o.com/", cat: "Designs" },
+  { name: "Lebassis", url: "https://lebassis.com/", cat: "Designs" },
+  { name: "1987 Graphics", url: "https://1987.graphics/", cat: "Designs" },
+  { name: "Julia Schimautz", url: "https://juliaschimautz.com/", cat: "Designs" },
+  { name: "Lee Jaemin", url: "https://www.leejaemin.net/", cat: "Designs" },
+  { name: "Typo Monday", url: "https://www.typomonday.com/", cat: "Designs" },
+  { name: "Baku89", url: "https://baku89.com/?lang=en", cat: "Designs" },
+  { name: "Works Studio", url: "https://works.studio/about", cat: "Designs" },
+
+  // EXPERIENCE
+  { name: "Future Deluxe CAD", url: "https://futuredeluxe.com/work/computer-aided-design", cat: "Experience" },
+  { name: "Modem Works / Terra", url: "https://modemworks.com/projects/terra/", cat: "Experience" },
+
+  // MINDFUL
+  { name: "Modem Works / Symbiotic", url: "https://modemworks.com/projects/symbiotic/", cat: "Mindful" },
+  { name: "CATK / Rimowa Artifacts", url: "https://catk.de/work/rimowa-artifacts", cat: "Mindful" },
+
+  // SPACES
+  { name: "Martien Mulder", url: "https://martienmulder.com/", cat: "Spaces" },
+  { name: "Plantea Estudio", url: "https://planteaestudio.com/es-en/", cat: "Spaces" },
+
+  // MOCKUP (ya hay arriba, Supply Family)
+  { name: "Supply Family", url: "https://supply.family/", cat: "Mockup" },
+];
+
+
+// ── HELPERS ───────────────────────────────────────────────────────────
+function getDomain(url) { try { return new URL(url).hostname; } catch { return ''; } }
+
+const catColors = {
+  "Fonts":"#c8ff00","Illustration":"#ff4d00","Animation":"#00cfff",
+  "Design":"#ff8800","3D / CGI":"#bf80ff","Typography":"#ffdd00",
+  "Art":"#ff69b4","Video":"#00ff9d","NFT":"#ff4d00","Arquitectura":"#80c8ff",
+  "Craft":"#ffb347","Film":"#c0c0c0","Color":"#ff6060","Mockup":"#aaffee",
+  "Foto":"#ffd6e8","Inspiration":"#c8ff00","Industrial":"#aac0c0",
+  "Designs":"#ff8800","Experience":"#00cfff","Mindful":"#80ff80","Spaces":"#d4b896"
+};
+
+// ── ESTADO ────────────────────────────────────────────────────────────
+let activeCategory = 'Todos';
+let searchQuery = '';
+
+const categories = ['Todos', ...new Set(refs.map(r => r.cat))];
+const countByCat = {};
+refs.forEach(r => { countByCat[r.cat] = (countByCat[r.cat] || 0) + 1; });
+
+// ── IMAGE CACHE (URL -> src ya resuelta) ──────────────────────────────
+const imgCache = {};
+
+// Fetch OG image via Microlink JSON API, then set img.src
+async function fetchOGImage(pageUrl) {
+  const encoded = encodeURIComponent(pageUrl);
+  const proxies = [
+    { url: 'https://api.allorigins.win/get?url=' + encoded, extract: r => r.json().then(j => j.contents || '') },
+    { url: 'https://corsproxy.io/?' + encoded,              extract: r => r.text() },
+  ];
+
+  let html = '';
+  for (const proxy of proxies) {
+    try {
+      const res = await fetch(proxy.url, { signal: AbortSignal.timeout(7000) });
+      if (!res.ok) continue;
+      html = await proxy.extract(res);
+      if (html) break;
+    } catch { continue; }
+  }
+  if (!html) return null;
+
+  // og:image or twitter:image — attribute order varies per site
+  const ogPatterns = [
+    /property=["']og:image:secure_url["'][^>]*content=["']([^"']+)["']/i,
+    /content=["']([^"']+)["'][^>]*property=["']og:image:secure_url["']/i,
+    /property=["']og:image["'][^>]*content=["']([^"']+)["']/i,
+    /content=["']([^"']+)["'][^>]*property=["']og:image["']/i,
+    /name=["']twitter:image["'][^>]*content=["']([^"']+)["']/i,
+    /content=["']([^"']+)["'][^>]*name=["']twitter:image["']/i,
+  ];
+  for (const re of ogPatterns) {
+    const m = html.match(re);
+    if (m && m[1] && m[1].startsWith('http')) return m[1];
+  }
+  return null;
+}
+
+async function loadImage(url, imgEl, favEl) {
+  // Already resolved
+  if (imgCache[url] !== undefined) {
+    if (imgCache[url]) {
+      imgEl.src = imgCache[url];
+      imgEl.style.opacity = '1';
+      favEl.style.display = 'none';
+    } else {
+      favEl.style.display = 'flex';
+    }
+    return;
+  }
+
+  try {
+    const ogImg = await fetchOGImage(url);
+    if (ogImg) {
+      imgCache[url] = ogImg;
+      imgEl.src = ogImg;
+      imgEl.onload = () => { imgEl.style.opacity = '1'; favEl.style.display = 'none'; };
+      imgEl.onerror = () => { imgCache[url] = null; favEl.style.display = 'flex'; };
+    } else {
+      imgCache[url] = null;
+      favEl.style.display = 'flex';
+    }
+  } catch {
+    imgCache[url] = null;
+    favEl.style.display = 'flex';
+  }
+}
+
+// IntersectionObserver to lazy-load only visible cards
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const card = entry.target;
+      const imgEl = card._imgEl;
+      const favEl = card._favEl;
+      const url   = card._url;
+      if (imgEl && url) loadImage(url, imgEl, favEl);
+      observer.unobserve(card);
+    }
+  });
+}, { rootMargin: '200px' });
+
+// ── FILTROS ───────────────────────────────────────────────────────────
+function buildFilters() {
+  const wrap = document.getElementById('filters');
+  categories.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-btn' + (cat === 'Todos' ? ' active' : '');
+    const count = cat === 'Todos' ? refs.length : (countByCat[cat] || 0);
+    btn.innerHTML = '<span>' + cat + '</span><span class="badge">' + count + '</span>';
+    btn.addEventListener('click', () => {
+      activeCategory = cat;
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      render();
+    });
+    wrap.appendChild(btn);
+  });
+}
+
+// ── CARD ──────────────────────────────────────────────────────────────
+function createCard(ref) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  const domain = getDomain(ref.url);
+  const color = catColors[ref.cat] || '#c8ff00';
+
+  // Image wrapper
+  const imgWrap = document.createElement('div');
+  imgWrap.className = 'card-img';
+
+  const pattern = document.createElement('div');
+  pattern.className = 'placeholder-pattern';
+  imgWrap.appendChild(pattern);
+
+  // The actual OG image (hidden until loaded)
+  const imgEl = document.createElement('img');
+  imgEl.alt = ref.name;
+  imgEl.loading = 'lazy';
+  imgEl.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity 0.45s;position:absolute;inset:0;';
+  imgEl.onload = () => { imgEl.style.opacity = '1'; favEl.style.display = 'none'; };
+  imgEl.onerror = () => { imgEl.style.display = 'none'; favEl.style.display = 'flex'; };
+
+  // Favicon placeholder (visible while loading)
+  const favEl = document.createElement('div');
+  favEl.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;';
+  const favImg = document.createElement('img');
+  favImg.src = 'https://www.google.com/s2/favicons?sz=64&domain=' + domain;
+  favImg.style.cssText = 'width:28px;height:28px;opacity:0.3;';
+  favEl.appendChild(favImg);
+
+  imgWrap.appendChild(favEl);
+  imgWrap.appendChild(imgEl);
+
+  // Store refs on card for observer
+  card._imgEl = imgEl;
+  card._favEl = favEl;
+  card._url   = ref.url;
+
+  // Link icon
+  const linkIcon = document.createElement('div');
+  linkIcon.className = 'card-link-icon';
+  linkIcon.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#c8ff00" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+
+  // Body
+  const body = document.createElement('div');
+  body.className = 'card-body';
+  body.innerHTML = '<div class="card-name">' + ref.name + '</div><div class="card-cat" style="color:' + color + '">' + ref.cat + '</div>';
+
+  card.appendChild(imgWrap);
+  card.appendChild(linkIcon);
+  card.appendChild(body);
+  card.addEventListener('click', () => window.open(ref.url, '_blank', 'noopener'));
+
+  return card;
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────
+function getFiltered() {
+  return refs.filter(r => {
+    const matchCat = activeCategory === 'Todos' || r.cat === activeCategory;
+    const q = searchQuery.toLowerCase();
+    const matchSearch = !q || r.name.toLowerCase().includes(q) || r.cat.toLowerCase().includes(q) || getDomain(r.url).includes(q);
+    return matchCat && matchSearch;
+  });
+}
+
+function render() {
+  const grid = document.getElementById('grid');
+  const empty = document.getElementById('empty');
+
+  // Remove old cards, keep #empty
+  Array.from(grid.children).forEach(c => { if (c.id !== 'empty') c.remove(); });
+
+  const filtered = getFiltered();
+  document.getElementById('count').textContent = filtered.length + ' refs';
+
+  if (!filtered.length) { empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+
+  filtered.forEach((ref, i) => {
+    const card = createCard(ref);
+    card.style.animationDelay = Math.min(i * 15, 300) + 'ms';
+    grid.insertBefore(card, empty);
+    observer.observe(card);
+  });
+}
+
+document.getElementById('search').addEventListener('input', e => {
+  searchQuery = e.target.value;
+  render();
+});
+
+buildFilters();
+render();
+</script>
+</body>
+</html>
