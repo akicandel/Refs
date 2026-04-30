@@ -369,83 +369,47 @@
 </div>
 
 <script>
-const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQxYJbNkH9ACkhNSlEBDu44N-7MwDKbZF8GRJ2xIOV0sRUQOC1ULquEHvG7hWbjrpFmsaTNDX0ttV1K/pub?output=csv';
+var refs = [{"name":"That That Type","url":"https://www.thatthattype.com/","cat":"Fonts"},{"name":"Pangram Pangram","url":"https://pangrampangram.com/collections/fonts","cat":"Fonts"},{"name":"Type Everything","url":"https://typeverything.com/","cat":"Fonts"},{"name":"Invasitype Work","url":"https://invasitypework.com/product-category/font/","cat":"Fonts"},{"name":"Type Colony","url":"https://typecolony.com/","cat":"Fonts"},{"name":"Grilli Type","url":"https://www.grillitype.com/","cat":"Fonts"},{"name":"TypeType","url":"https://typetype.org/","cat":"Fonts"},{"name":"Good Type Foundry","url":"https://goodtypefoundry.com/","cat":"Fonts"},{"name":"Klim","url":"https://klim.co.nz/","cat":"Fonts"},{"name":"Studio Puhl","url":"https://studiopuhl.com/work","cat":"Illustration"},{"name":"Andrea Alice","url":"https://andreaalice.com/","cat":"Illustration"},{"name":"Meganck","url":"https://meganck.com/","cat":"Illustration"},{"name":"Justin Poulter","url":"https://justinpoulter.com/","cat":"Illustration"},{"name":"Louis Rhead / Artvee","url":"https://artvee.com/artist/louis-rhead/","cat":"Illustration"},{"name":"Lolly Studio","url":"https://www.lollystudio.co.uk/work","cat":"Illustration"},{"name":"Kenzo Hamazaki","url":"https://kenzohamazaki.com.br/","cat":"Illustration"},{"name":"Jonas Mosesson","url":"https://jonasmosesson.se/","cat":"Illustration"},{"name":"Chiara Ghigliazza","url":"https://chiaraghigliazza.com/","cat":"Illustration"},{"name":"Hifumiyo","url":"http://www.hifumiyo.co/","cat":"Illustration"},{"name":"Thom Kemeyer","url":"https://www.thomkemeyer.com/","cat":"Illustration"},{"name":"Hine Mizushima","url":"https://hinemizushima.com/","cat":"Illustration"},{"name":"Untitled Army","url":"https://untitledarmy.com/","cat":"Illustration"},{"name":"Agence Pepite","url":"https://agence-pepite.fr/en/","cat":"Illustration"},{"name":"Caper Illustration","url":"https://www.caperillustration.co.uk/nanjiao-xi","cat":"Illustration"},{"name":"A Goodson","url":"https://www.agoodson.com/","cat":"Illustration"},{"name":"Jasuh Art","url":"https://www.jasuhuart.com/index","cat":"Illustration"},{"name":"Benedikt Luft","url":"https://benediktluft.com/","cat":"Illustration"},{"name":"See Outer Space","url":"https://www.seeouterspace.com/These-days","cat":"Illustration"},{"name":"Rob Hodgson","url":"https://www.robhodgson.com/","cat":"Illustration"},{"name":"Barry Blitt","url":"https://www.barryblitt.com/gallery-1","cat":"Illustration"},{"name":"Caroline Peron / Senso","url":"https://www.senso.art/en/caroline-peron","cat":"Illustration"},{"name":"Senso Art","url":"https://www.senso.art/en/","cat":"Illustration"},{"name":"Jean Aubertin / Senso","url":"https://www.senso.art/en/jean-aubertin","cat":"Illustration"},{"name":"Levine Leavitt","url":"https://levineleavitt.com/","cat":"Illustration"},{"name":"Lebassis","url":"https://lebassis.com/","cat":"Illustration"},{"name":"Joseph Melhuish","url":"https://josephmelhuish.com/","cat":"Illustration"},{"name":"Barbara Alca","url":"https://www.barbaraalca.com/","cat":"Illustration"},{"name":"Jonas Mosesson","url":"https://jonasmosesson.se/","cat":"Animation"},{"name":"Believe.tv","url":"https://believe.tv/","cat":"Animation"},{"name":"A Goodson","url":"https://www.agoodson.com/","cat":"Animation"},{"name":"OTP Works","url":"https://otp-works.tumblr.com/","cat":"Animation"},{"name":"Space Type Generator","url":"https://spacetypegenerator.com/","cat":"Animation"},{"name":"Vetor Zero","url":"https://vetorzero.com.br/","cat":"Animation"},{"name":"Lobo","url":"https://www.lobo.cx/","cat":"Animation"},{"name":"Margherita Premuroso","url":"https://www.margheritapremuroso.com/projects","cat":"Animation"},{"name":"Roof Studio","url":"https://roofstudio.tv/about","cat":"Animation"},{"name":"Alba Motion","url":"https://albamotion.com/ABOUT","cat":"Animation"},{"name":"MakeMake / Elastic","url":"https://makemake.com/elastic/work/filter/entertainment/","cat":"Animation"},{"name":"Design Reviewed","url":"https://designreviewed.com/","cat":"Design"},{"name":"Fonts In Use","url":"https://fontsinuse.com/","cat":"Design"},{"name":"German Montalvo","url":"http://www.germanmontalvo.com/cartel.html","cat":"Design"},{"name":"Justin Poulter","url":"https://justinpoulter.com/","cat":"Design"},{"name":"Flock","url":"https://weareflock.com/","cat":"Design"},{"name":"World Brand Design","url":"https://worldbranddesign.com/team-creates-hand-designed-jazz-inspired-packaging-for-blue-note-bars-new-bottled-cocktail/","cat":"Design"},{"name":"Marta Cerda","url":"https://martacerda.com/","cat":"Design"},{"name":"100 London Underground Posters","url":"https://iaqgraphicdesign.wordpress.com/2014/03/13/100-london-underground-posters/","cat":"Design"},{"name":"The Dieline","url":"https://thedieline.com/","cat":"Design"},{"name":"Minako Iwamura","url":"https://minako-iwamura.com/","cat":"Design"},{"name":"Kasa Made","url":"https://kasa-made.com/","cat":"Design"},{"name":"Studio Herrstrom","url":"https://www.studioherrstrom.com/","cat":"Design"},{"name":"Studio Plastac","url":"https://studioplastac.fr/","cat":"Design"},{"name":"We Want More Studio","url":"https://wewantmore.studio/","cat":"Design"},{"name":"Gretel NY / Viceland","url":"https://gretelny.com/viceland","cat":"Design"},{"name":"Design Bridge","url":"https://www.designbridge.com/work","cat":"Design"},{"name":"The Brand Identity","url":"https://the-brandidentity.com/","cat":"Design"},{"name":"Lebassis","url":"https://lebassis.com/","cat":"Design"},{"name":"Carla Palette","url":"https://carlapalette.com/works","cat":"Design"},{"name":"1987 Graphics","url":"https://1987.graphics/","cat":"Design"},{"name":"Form and Fun","url":"https://www.formandfun.co/","cat":"Design"},{"name":"Lolly Studio","url":"https://www.lollystudio.co.uk/","cat":"3D / CGI"},{"name":"Vinicius Costa","url":"https://viniciuscosta.tv/work","cat":"3D / CGI"},{"name":"Noelia Lozano","url":"https://www.noelialozano.com/","cat":"3D / CGI"},{"name":"One Sal","url":"https://onesal.com/","cat":"3D / CGI"},{"name":"Untitled Army","url":"https://untitledarmy.com/","cat":"3D / CGI"},{"name":"Crea.st","url":"https://crea.st/","cat":"3D / CGI"},{"name":"MVSM","url":"https://mvsm.com/","cat":"3D / CGI"},{"name":"Free Agents","url":"https://www.freeagents.co/","cat":"3D / CGI"},{"name":"The Mill","url":"https://themill.com/","cat":"3D / CGI"},{"name":"1st Ave Machine","url":"https://www.1stavemachine.com/work-2/work","cat":"3D / CGI"},{"name":"Bolder Creative","url":"https://boldercreative.co.uk/","cat":"3D / CGI"},{"name":"Future Deluxe","url":"https://futuredeluxe.com/work/computer-aided-design","cat":"3D / CGI"},{"name":"CATK","url":"https://catk.de/","cat":"3D / CGI"},{"name":"Levine Leavitt","url":"https://levineleavitt.com/","cat":"3D / CGI"},{"name":"Someform Studio","url":"https://someform.studio/","cat":"3D / CGI"},{"name":"Tendril","url":"https://tendril.studio/","cat":"3D / CGI"},{"name":"Buck","url":"https://buck.co/","cat":"3D / CGI"},{"name":"J Formento","url":"https://jformento.com/work/","cat":"3D / CGI"},{"name":"Nolbert","url":"https://nolbert.com/","cat":"3D / CGI"},{"name":"MakeMake","url":"https://makemake.com/","cat":"3D / CGI"},{"name":"Arsthanea","url":"https://arsthanea.com/","cat":"3D / CGI"},{"name":"Form and Fun","url":"https://www.formandfun.co/","cat":"3D / CGI"},{"name":"Leroy Van Drie","url":"https://www.leroyvandrie.com/","cat":"3D / CGI"},{"name":"Pezzo di Studio","url":"https://pezzodistudio.com/about","cat":"3D / CGI"},{"name":"Anthony Burrill","url":"https://anthonyburrill.com/","cat":"Typography"},{"name":"Vocal Type","url":"https://www.vocaltype.co/typefaces","cat":"Typography"},{"name":"Lebassis","url":"https://lebassis.com/","cat":"Typography"},{"name":"Madeup Covers","url":"https://www.madeup.org/covers","cat":"Typography"},{"name":"Marta Cerda","url":"https://martacerda.com/","cat":"Typography"},{"name":"Andrew Hudson","url":"https://www.andrewhudson.co.uk/","cat":"Typography"},{"name":"Dan Forster","url":"https://danforster.com/about/","cat":"Typography"},{"name":"Lemon Typeface","url":"https://www.behance.net/gallery/182528277/Lemon-Typeface-18-Styles-Variable-Regular-Free","cat":"Typography"},{"name":"Grilli Type","url":"https://www.grillitype.com/","cat":"Typography"},{"name":"Pangram Pangram","url":"https://pangrampangram.com/collections/fonts","cat":"Typography"},{"name":"Commercial Type","url":"https://commercialtype.com/","cat":"Typography"},{"name":"Fonts In Use","url":"https://fontsinuse.com/","cat":"Typography"},{"name":"Type Department","url":"https://type-department.com/","cat":"Typography"},{"name":"Alex Valentina","url":"https://alexvalentina.com/","cat":"Typography"},{"name":"Abraham Lule","url":"https://www.abrahamlule.com/","cat":"Typography"},{"name":"Type of Feeling","url":"https://typeoffeeling.com/","cat":"Typography"},{"name":"VJ Type","url":"https://vj-type.com/","cat":"Typography"},{"name":"Space Type Generator","url":"https://spacetypegenerator.com/","cat":"Typography"},{"name":"Not Your Type","url":"https://notyourtype.nl/typefaces/","cat":"Typography"},{"name":"Mahimkar","url":"https://www.mahimkar.com/","cat":"Typography"},{"name":"Matti Braun / Esther Schipper","url":"https://www.estherschipper.com/artists/32-matti-braun/","cat":"Art"},{"name":"Artvee","url":"https://artvee.com/","cat":"Art"},{"name":"Jumana Manna","url":"https://www.jumanamanna.com/","cat":"Art"},{"name":"Hine Mizushima","url":"https://hinemizushima.com/","cat":"Art"},{"name":"Coded Elegance / 1stDibs","url":"https://www.1stdibs.com/nft-collections/exhibitions/coded-elegance/","cat":"Art"},{"name":"Eycndy","url":"https://eycndy.co/","cat":"Video"},{"name":"Roof Studio","url":"https://roofstudio.tv/","cat":"Video"},{"name":"Hine Mizushima Videos","url":"https://hinemizushima.com/videos","cat":"Video"},{"name":"Film Grab","url":"https://film-grab.com/","cat":"Video"},{"name":"Division Global","url":"https://www.division.global/","cat":"Video"},{"name":"Coded Elegance / 1stDibs","url":"https://www.1stdibs.com/nft-collections/exhibitions/coded-elegance/","cat":"NFT"},{"name":"VGZ Arquitectura","url":"https://www.vgzarquitectura.com/proyectos-arquitectura","cat":"Arquitectura"},{"name":"Kasa Made","url":"https://kasa-made.com/","cat":"Arquitectura"},{"name":"Picte Studio","url":"https://pictestudio.com.br/","cat":"Craft"},{"name":"Tanaka Tatsuya","url":"https://www.instagram.com/tanaka_tatsuya/","cat":"Craft"},{"name":"Anthony Zinonos","url":"https://anthonyzinonos.com/","cat":"Craft"},{"name":"Dtan Studio","url":"https://dtan.studio/","cat":"Craft"},{"name":"Design and Paper","url":"https://www.designandpaper.com/topics/paper/","cat":"Craft"},{"name":"Motor Niveo","url":"https://motor.niveo.com.br/","cat":"Craft"},{"name":"Modem Works / Terra","url":"https://modemworks.com/projects/terra/","cat":"Craft"},{"name":"Levine Leavitt","url":"https://levineleavitt.com/","cat":"Craft"},{"name":"MakeMake","url":"https://makemake.com/","cat":"Craft"},{"name":"Vimeo 446667224","url":"https://vimeo.com/446667224","cat":"Film"},{"name":"Landia Mexico","url":"https://www.landia.com/mexico/","cat":"Film"},{"name":"Not Normal Films","url":"https://www.notnormalfilms.com/","cat":"Film"},{"name":"Rebolucion","url":"https://www.rebolucion.com/","cat":"Film"},{"name":"Oriental Films","url":"https://www.orientalfilms.tv/","cat":"Film"},{"name":"Alex Sees This","url":"https://alexseesthis.com/","cat":"Film"},{"name":"Niclas Larsson / Vimeo","url":"https://vimeo.com/niclaslarsson","cat":"Film"},{"name":"Company 3","url":"https://www.company3.com/","cat":"Film"},{"name":"Film Grab","url":"https://film-grab.com/","cat":"Film"},{"name":"David Drake","url":"https://www.daviddrake.co.uk/","cat":"Film"},{"name":"Somework TV","url":"https://somework.tv/","cat":"Film"},{"name":"Company 3","url":"https://www.company3.com/","cat":"Color"},{"name":"Showcase BH","url":"https://showcasebh.com/all-mockup.html","cat":"Mockup"},{"name":"Mockup Maison","url":"https://mockup.maison/collections/apparel","cat":"Mockup"},{"name":"Bendito Mockup","url":"https://benditomockup.com/shop","cat":"Mockup"},{"name":"Supply Family","url":"https://supply.family/","cat":"Mockup"},{"name":"Kito Munoz / Artlist Paris","url":"https://www.artlistparis.com/kito-munoz","cat":"Foto"},{"name":"Giant Artists","url":"https://www.giantartists.com/categories","cat":"Foto"},{"name":"Lucas Garrido","url":"https://lucasgarrido.com/","cat":"Foto"},{"name":"Guy Aroch","url":"https://www.instagram.com/guyaroch/","cat":"Foto"},{"name":"Jeffrey Czum Editions","url":"https://jeffreyczumeditions.com/","cat":"Foto"},{"name":"Jake Stangel","url":"https://jakestangel.com/","cat":"Foto"},{"name":"Ioe Greer","url":"https://www.instagram.com/ioegreer/","cat":"Foto"},{"name":"Willem Verbeeck","url":"https://www.willemverbeeck.com/","cat":"Foto"},{"name":"Dan Tobin Smith","url":"https://www.dantobinsmith.com/portfolio","cat":"Foto"},{"name":"Owen Harvey","url":"https://owen-harvey.com/Series-Index","cat":"Foto"},{"name":"Lou Escobar","url":"https://louescobar.com/print/","cat":"Foto"},{"name":"Ana Cuba","url":"https://anacuba.com/","cat":"Foto"},{"name":"Will Cooper Photography","url":"https://www.willcooperphotography.com/","cat":"Foto"},{"name":"VL Lorente","url":"https://www.vllorente.com/","cat":"Foto"},{"name":"Img Upscaler","url":"https://imgupscaler.com/","cat":"Foto"},{"name":"Gavin Goodman","url":"https://www.gavingoodman.com/home-1","cat":"Foto"},{"name":"Dan Carter","url":"https://dancarter.co/","cat":"Foto"},{"name":"Ilka Franz","url":"https://www.ilkafranz.com/","cat":"Foto"},{"name":"Oscar Matt","url":"https://oscarmatt.com/","cat":"Foto"},{"name":"Oscar Calleja","url":"https://www.oscarcalleja.com/","cat":"Foto"},{"name":"Harel Ocante / Senso","url":"https://www.senso.photo/fr/harel-ocante","cat":"Foto"},{"name":"Manu Fauque","url":"https://www.manufauque.com/portfolio","cat":"Foto"},{"name":"Andrea Arevalo","url":"https://andreaarevalo.com/","cat":"Foto"},{"name":"Manel Cano","url":"https://manelcano.com/work-desktop","cat":"Foto"},{"name":"Porodina","url":"https://porodina.com/","cat":"Foto"},{"name":"Thibaut Grevet","url":"https://www.thibautgrevet.com/","cat":"Foto"},{"name":"Pablo de Pastors","url":"https://pablodepastors.com/works","cat":"Foto"},{"name":"Jack Webb / 1972 Agency","url":"https://1972.agency/artists/jack-webb/portfolios/general-portfolio-49/1232","cat":"Foto"},{"name":"Alys Thomas","url":"https://www.alysthomas.com/","cat":"Foto"},{"name":"Thibaut Grevet Photography","url":"https://photography.thibautgrevet.com/","cat":"Foto"},{"name":"Juliana Kasumu","url":"https://www.julianakasumu.com/portraits","cat":"Foto"},{"name":"Christopher Anderson Photo","url":"https://christopherandersonphoto.com/","cat":"Foto"},{"name":"Zhonglin","url":"https://www.instagram.com/zhonglin_/","cat":"Foto"},{"name":"Richard John Seymour","url":"https://richardjohnseymour.com/home","cat":"Foto"},{"name":"Nadav Kander","url":"https://www.nadavkander.com/portraits","cat":"Foto"},{"name":"Jake Inez","url":"https://www.jakeinez.net/personal","cat":"Foto"},{"name":"Marcus Smith","url":"https://www.marcus-smith.com/","cat":"Foto"},{"name":"Van Schelven","url":"https://www.van-schelven.com/","cat":"Foto"},{"name":"Fuse Kiwi","url":"https://www.fuse.kiwi/","cat":"Inspiration"},{"name":"Alessandro Boldrin","url":"https://www.alessandroboldrin.de/work","cat":"Industrial"},{"name":"Product Notion","url":"https://product-notion.com/","cat":"Industrial"},{"name":"Due Studio","url":"https://www.due-studio.com/","cat":"Designs"},{"name":"Reesaw / Behance","url":"https://www.behance.net/reesaw1","cat":"Designs"},{"name":"Soup Work","url":"https://soup.work/about","cat":"Designs"},{"name":"Tristesse","url":"https://www.tristesse.ch/","cat":"Designs"},{"name":"Carlos Bernal Portfolio","url":"https://carlosbernalportfolio.com/","cat":"Designs"},{"name":"HNLN","url":"https://hnln.co/","cat":"Designs"},{"name":"Joan Comellas Design","url":"https://joancomellas.design/","cat":"Designs"},{"name":"Yang Raller","url":"https://yangraller.cargo.site/","cat":"Designs"},{"name":"Jennifer Sterling Design","url":"https://www.jennifersterlingdesign.com/","cat":"Designs"},{"name":"Bruno Oppido","url":"http://www.brunooppido.com/","cat":"Designs"},{"name":"Y-U-K-I-K-O","url":"https://y-u-k-i-k-o.com/","cat":"Designs"},{"name":"Lebassis","url":"https://lebassis.com/","cat":"Designs"},{"name":"1987 Graphics","url":"https://1987.graphics/","cat":"Designs"},{"name":"Julia Schimautz","url":"https://juliaschimautz.com/","cat":"Designs"},{"name":"Lee Jaemin","url":"https://www.leejaemin.net/","cat":"Designs"},{"name":"Typo Monday","url":"https://www.typomonday.com/","cat":"Designs"},{"name":"Baku89","url":"https://baku89.com/","cat":"Designs"},{"name":"Works Studio","url":"https://works.studio/about","cat":"Designs"},{"name":"Future Deluxe CAD","url":"https://futuredeluxe.com/work/computer-aided-design","cat":"Experience"},{"name":"Modem Works / Terra","url":"https://modemworks.com/projects/terra/","cat":"Experience"},{"name":"Modem Works / Symbiotic","url":"https://modemworks.com/projects/symbiotic/","cat":"Mindful"},{"name":"CATK / Rimowa Artifacts","url":"https://catk.de/work/rimowa-artifacts","cat":"Mindful"},{"name":"Martien Mulder","url":"https://martienmulder.com/","cat":"Spaces"},{"name":"Plantea Estudio","url":"https://planteaestudio.com/es-en/","cat":"Spaces"}];
 
-const catColors = {
-  "Fonts":"#c8ff00","Illustration":"#ff4d00","Animation":"#00cfff",
-  "Design":"#ff8800","3D / CGI":"#bf80ff","Typography":"#ffdd00",
-  "Art":"#ff69b4","Video":"#00ff9d","NFT":"#ff4d00","Arquitectura":"#80c8ff",
-  "Craft":"#ffb347","Film":"#c0c0c0","Color":"#ff6060","Mockup":"#aaffee",
-  "Foto":"#ffd6e8","Inspiration":"#c8ff00","Industrial":"#aac0c0",
-  "Designs":"#ff8800","Experience":"#00cfff","Mindful":"#80ff80","Spaces":"#d4b896"
-};
-
-function getDomain(url) { try { return new URL(url).hostname; } catch { return ''; } }
-
-function getCatColor(cat) {
-  if (catColors[cat]) return catColors[cat];
-  let hash = 0;
-  for (let i = 0; i < cat.length; i++) hash = cat.charCodeAt(i) + ((hash << 5) - hash);
-  return 'hsl(' + (Math.abs(hash) % 360) + ', 70%, 65%)';
-}
-
-function parseCSV(text) {
-  const rows = [];
-  const lines = text.trim().split(/
-?
-/);
-  const headers = lines[0].split(',').map(function(h) { return h.replace(/"/g, '').trim().toLowerCase(); });
-  for (let i = 1; i < lines.length; i++) {
-    var line = lines[i];
-    var values = [];
-    var cur = '';
-    var inQ = false;
-    for (var j = 0; j < line.length; j++) {
-      var c = line[j];
-      if (c === '"') { inQ = !inQ; }
-      else if (c === ',' && !inQ) { values.push(cur); cur = ''; }
-      else { cur += c; }
-    }
-    values.push(cur);
-    var obj = {};
-    headers.forEach(function(h, idx) { obj[h] = (values[idx] || '').replace(/^"|"$/g, '').trim(); });
-    if (obj.url && obj.name && obj.url.indexOf('http') === 0) rows.push(obj);
-  }
-  return rows;
-}
-
-var refs = [];
 var activeCategory = 'Todos';
 var searchQuery = '';
 var imgCache = {};
 
+var catColors = {"Fonts":"#c8ff00","Illustration":"#ff4d00","Animation":"#00cfff","Design":"#ff8800","3D / CGI":"#bf80ff","Typography":"#ffdd00","Art":"#ff69b4","Video":"#00ff9d","NFT":"#ff4d00","Arquitectura":"#80c8ff","Craft":"#ffb347","Film":"#c0c0c0","Color":"#ff6060","Mockup":"#aaffee","Foto":"#ffd6e8","Inspiration":"#c8ff00","Industrial":"#aac0c0","Designs":"#ff8800","Experience":"#00cfff","Mindful":"#80ff80","Spaces":"#d4b896"};
+
+function getDomain(url) { try { return new URL(url).hostname; } catch(e) { return ''; } }
+
+function getCatColor(cat) {
+  if (catColors[cat]) return catColors[cat];
+  var hash = 0;
+  for (var i = 0; i < cat.length; i++) hash = cat.charCodeAt(i) + ((hash << 5) - hash);
+  return 'hsl(' + (Math.abs(hash) % 360) + ', 70%, 65%)';
+}
+
 async function fetchOGImage(pageUrl) {
   var encoded = encodeURIComponent(pageUrl);
   var proxies = [
-    { url: 'https://api.allorigins.win/get?url=' + encoded, extract: function(r) { return r.json().then(function(j) { return j.contents || ''; }); } },
-    { url: 'https://corsproxy.io/?' + encoded, extract: function(r) { return r.text(); } }
+    { url: 'https://api.allorigins.win/get?url=' + encoded, json: true },
+    { url: 'https://corsproxy.io/?' + encoded, json: false }
   ];
   var html = '';
   for (var i = 0; i < proxies.length; i++) {
     try {
-      var res = await fetch(proxies[i].url, { signal: AbortSignal.timeout(7000) });
+      var res = await fetch(proxies[i].url);
       if (!res.ok) continue;
-      html = await proxies[i].extract(res);
+      html = proxies[i].json ? (await res.json()).contents || '' : await res.text();
       if (html) break;
     } catch(e) { continue; }
   }
   if (!html) return null;
-  var patterns = [
-    /property=["']og:image:secure_url["'][^>]*content=["']([^"']+)["']/i,
-    /content=["']([^"']+)["'][^>]*property=["']og:image:secure_url["']/i,
-    /property=["']og:image["'][^>]*content=["']([^"']+)["']/i,
-    /content=["']([^"']+)["'][^>]*property=["']og:image["']/i,
-    /name=["']twitter:image["'][^>]*content=["']([^"']+)["']/i,
-    /content=["']([^"']+)["'][^>]*name=["']twitter:image["']/i
-  ];
-  for (var p = 0; p < patterns.length; p++) {
-    var m = html.match(patterns[p]);
-    if (m && m[1] && m[1].indexOf('http') === 0) return m[1];
+  var tags = html.match(/<meta[^>]+>/gi) || [];
+  for (var t = 0; t < tags.length; t++) {
+    var tag = tags[t];
+    var isOG = /property=["']og:image["']/i.test(tag) || /name=["']twitter:image["']/i.test(tag);
+    if (isOG) {
+      var m = tag.match(/content=["']([^"']+)["']/i);
+      if (m && m[1] && m[1].indexOf('http') === 0) return m[1];
+    }
   }
   return null;
 }
@@ -467,10 +431,7 @@ async function loadImage(url, imgEl, favEl) {
       imgCache[url] = null;
       favEl.style.display = 'flex';
     }
-  } catch(e) {
-    imgCache[url] = null;
-    favEl.style.display = 'flex';
-  }
+  } catch(e) { imgCache[url] = null; favEl.style.display = 'flex'; }
 }
 
 var observer = new IntersectionObserver(function(entries) {
@@ -486,7 +447,9 @@ var observer = new IntersectionObserver(function(entries) {
 function buildFilters() {
   var wrap = document.getElementById('filters');
   wrap.innerHTML = '';
-  var categories = ['Todos'].concat([...new Set(refs.map(function(r) { return r.cat; }).filter(Boolean))]);
+  var seen = {};
+  var categories = ['Todos'];
+  refs.forEach(function(r) { if (r.cat && !seen[r.cat]) { seen[r.cat] = true; categories.push(r.cat); } });
   var countByCat = {};
   refs.forEach(function(r) { countByCat[r.cat] = (countByCat[r.cat] || 0) + 1; });
   categories.forEach(function(cat) {
@@ -519,7 +482,6 @@ function createCard(ref) {
   var imgEl = document.createElement('img');
   imgEl.alt = ref.name;
   imgEl.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity 0.45s;position:absolute;inset:0;';
-  imgEl.onerror = function() { imgEl.style.display = 'none'; favEl.style.display = 'flex'; };
 
   var favEl = document.createElement('div');
   favEl.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;';
@@ -527,6 +489,7 @@ function createCard(ref) {
   favImg.src = 'https://www.google.com/s2/favicons?sz=64&domain=' + domain;
   favImg.style.cssText = 'width:28px;height:28px;opacity:0.3;';
   favEl.appendChild(favImg);
+  imgEl.onerror = function() { imgEl.style.display = 'none'; favEl.style.display = 'flex'; };
 
   imgWrap.appendChild(favEl);
   imgWrap.appendChild(imgEl);
@@ -574,29 +537,13 @@ function render() {
   });
 }
 
-async function init() {
-  document.getElementById('search').addEventListener('input', function(e) {
-    searchQuery = e.target.value;
-    render();
-  });
-  var empty = document.getElementById('empty');
-  empty.style.display = 'block';
-  empty.textContent = 'Cargando referencias...';
-  try {
-    var res = await fetch(SHEET_CSV, { signal: AbortSignal.timeout(10000) });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    var csv = await res.text();
-    refs = parseCSV(csv);
-    if (!refs.length) throw new Error('La hoja esta vacia');
-    buildFilters();
-    render();
-  } catch(err) {
-    empty.style.display = 'block';
-    empty.textContent = 'Error: ' + err.message;
-  }
-}
+document.getElementById('search').addEventListener('input', function(e) {
+  searchQuery = e.target.value;
+  render();
+});
 
-init();
+buildFilters();
+render();
 </script>
 </body>
 </html>
